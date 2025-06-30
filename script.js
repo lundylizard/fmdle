@@ -1,7 +1,7 @@
 let cards = [];
 let answerCard;
 let attempts = 0;
-const maxAttempts = 10;
+const maxAttempts = 5;
 
 const cardTypes = [
     "Dragon",
@@ -204,7 +204,7 @@ function filterSuggestions(inputValue, usedNames) {
     if (!inputValue) return [];
     const val = inputValue.toLowerCase();
     return cards.filter(
-        (c) => c.name.toLowerCase().startsWith(val) && !usedNames.has(c.name)
+        (c) => c.name.toLowerCase().includes(val) && !usedNames.has(c.name)
     );
 }
 
