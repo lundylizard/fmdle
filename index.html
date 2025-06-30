@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>FM Daily Guess</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="game">
+    <div id="input-container" style="position: relative; width: 60%; margin: 0.5rem auto;">
+      <input type="text" id="guess-input" placeholder="Guess a card..." autocomplete="off" spellcheck="false"
+        style="width: 100%;" />
+      <div id="suggestions"></div>
+      <div id="guess-counter">Guesses: 0 / 10</div>
+    </div>
+    <div id="guesses-container" style="max-width: 500px; margin: 1rem auto; font-family: sans-serif; user-select: none;">
+      <div id="labels" style="display: flex; align-items: center; gap: 10px; color: #aaa; font-weight: bold; text-align: center;">
+        <div style="width: 60px;">Card</div>
+        <div style="width: 60px;">Type</div>
+        <div style="width: 60px;">ATK</div>
+        <div style="width: 60px;">DEF</div>
+        <div style="width: 60px;">Level</div>
+        <div style="width: 60px;">Star A</div>
+        <div style="width: 60px;">Star B</div>
+      </div>
+      <div id="guesses"></div>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>

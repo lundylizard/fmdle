@@ -1,0 +1,148 @@
+body {
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    padding: 1rem;
+    background-color: #121212;
+    color: #eee;
+}
+
+input {
+    padding: 0.5rem;
+    width: 60%;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 5px #444;
+    background-color: #222;
+    color: #eee;
+}
+
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #222;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    max-height: 320px;
+    overflow-y: auto;
+    width: 100%;
+    /* match input width */
+    z-index: 1000;
+    display: none;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    gap: 10px;
+    color: #eee;
+    user-select: none;
+}
+
+.suggestion-item:hover {
+    background-color: #333;
+}
+
+.suggestion-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+#guesses {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.guess-result {
+    max-width: 500px;
+    /* or any width you prefer */
+    margin: 5px auto;
+    /* center horizontally */
+    padding: 0.5rem;
+    border: 1px solid #555;
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    user-select: none;
+}
+
+.guess-card {
+    display: flex;
+    align-items: center;
+}
+
+.guess-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.stats-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 0;
+}
+
+.stat-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    color: white;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.stat-box.correct {
+    background-color: #4caf50;
+}
+
+.stat-box.wrong {
+    background-color: #f44336;
+}
+
+.stat-box.arrow-up,
+.stat-box.arrow-down {
+    background-color: #f44336;
+}
+
+#guess-counter {
+    margin-top: 6px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.header-row .stat-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #aaa;
+    font-size: 0.85rem;
+    user-select: none;
+}
