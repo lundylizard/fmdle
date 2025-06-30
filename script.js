@@ -58,8 +58,13 @@ function hashCode(str) {
 }
 
 function dailyIndex(total) {
+    return getRandomInt(total);
     const today = new Date().toISOString().slice(0, 10);
     return Math.abs(hashCode(today)) % total;
+}
+
+function getRandomInt(limit) {
+    return Math.floor(Math.random() * limit) + 1;
 }
 
 function compareStat(guessValue, answerValue) {
@@ -253,9 +258,9 @@ function makeGuess(guessNameParam) {
     if (guessCard.name === answerCard.name) {
         document.getElementById(
             "result"
-        ).innerHTML = `<h2>🎉 You got it in ${attempts} tries!</h2><img src="data/yugioh_card_artworks/${String(
+        ).innerHTML = `<h2>🎉 You got it in ${attempts} tries!</h2><img src="data/yugioh_card_artworks_full/${String(
             answerCard.id
-        ).padStart(3, "0")}.png" width="300">`;
+        ).padStart(3, "0")}.png" width="200">`;
         input.disabled = true;
         clearSuggestions();
     } else if (attempts >= maxAttempts) {
