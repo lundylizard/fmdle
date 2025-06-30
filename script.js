@@ -58,7 +58,7 @@ function hashCode(str) {
 }
 
 function dailyIndex(total) {
-    return getRandomInt(total);
+    return getRandomInt(total)
     const today = new Date().toISOString().slice(0, 10);
     return Math.abs(hashCode(today)) % total;
 }
@@ -87,11 +87,17 @@ function compareCards(guess, answer) {
         guardianA:
             guess.guardianStarA === answer.guardianStarA
                 ? `✅ (${starNames[guess.guardianStarA] || "?"})`
-                : `❌ (${starNames[guess.guardianStarA] || "?"})`,
+                : guess.guardianStarA === answer.guardianStarB
+                    ? `⚠️ (${starNames[guess.guardianStarA] || "?"})`
+                    : `❌ (${starNames[guess.guardianStarA] || "?"})`,
+
         guardianB:
             guess.guardianStarB === answer.guardianStarB
                 ? `✅ (${starNames[guess.guardianStarB] || "?"})`
-                : `❌ (${starNames[guess.guardianStarB] || "?"})`,
+                : guess.guardianStarB === answer.guardianStarA
+                    ? `⚠️ (${starNames[guess.guardianStarB] || "?"})`
+                    : `❌ (${starNames[guess.guardianStarB] || "?"})`,
+
     };
 }
 
@@ -111,6 +117,9 @@ function createStatBox(value, status) {
     } else if (status === "down") {
         box.classList.add("arrow-down");
         box.textContent = `↓ ${value}`;
+    } else if (status === "partial") {
+        box.classList.add("partial");
+        box.textContent = value;
     }
 
     return box;
@@ -118,20 +127,16 @@ function createStatBox(value, status) {
 
 function parseStat(raw, type = "numeric") {
     const match = raw.match(/\((.*)\)/);
-    const value = match ? match[1] : match[1]; // fallback value for pure ✅
+    const value = match ? match[1] : raw; // show only the value, no emoji
 
-    if (raw.startsWith("✅")) {
-        return { value, status: "correct" };
-    }
-
-    if (type === "boolean") {
-        return { value, status: "wrong-type" };
-    }
-
+    if (raw.startsWith("✅")) return { value, status: "correct" };
+    if (raw.startsWith("⚠️")) return { value, status: "partial" };
     if (raw.startsWith("⬆️")) return { value, status: "up" };
     if (raw.startsWith("⬇️")) return { value, status: "down" };
 
-    return { value, status: "wrong-type" }; // fallback
+    if (type === "boolean") return { value, status: "wrong-type" };
+
+    return { value, status: "wrong-type" };
 }
 
 function renderComparison(result) {
@@ -175,12 +180,19 @@ function renderComparison(result) {
     const guardianABox = createStatBox(guardianAData.value, guardianAData.status);
     const guardianBBox = createStatBox(guardianBData.value, guardianBData.status);
 
-    statsRow.appendChild(typeBox);
-    statsRow.appendChild(attackBox);
-    statsRow.appendChild(defenseBox);
-    statsRow.appendChild(levelBox);
-    statsRow.appendChild(guardianABox);
-    statsRow.appendChild(guardianBBox);
+    const statBoxes = [
+        typeBox,
+        attackBox,
+        defenseBox,
+        levelBox,
+        guardianABox,
+        guardianBBox
+    ];
+
+    statBoxes.forEach((box, index) => {
+        box.style.animationDelay = `${index * 0.5}s`; // 150ms delay between each
+        statsRow.appendChild(box);
+    });
 
     row.appendChild(image);
     row.appendChild(statsRow);

@@ -59,7 +59,7 @@ input {
 }
 
 #guesses {
-    margin-top: 20px;
+    margin-top: 5px;
     display: flex;
     gap: 10px;
 }
@@ -99,7 +99,20 @@ input {
     margin-top: 0;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .stat-box {
+    opacity: 0;
     width: 60px;
     height: 60px;
     border-radius: 6px;
@@ -112,6 +125,7 @@ input {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     text-align: center;
     line-height: 1.2;
+    animation: fadeIn 1s ease forwards;
 }
 
 .stat-box.correct {
@@ -125,6 +139,10 @@ input {
 .stat-box.arrow-up,
 .stat-box.arrow-down {
     background-color: #f44336;
+}
+
+.stat-box.partial {
+    background-color: orange;
 }
 
 #guess-counter {
