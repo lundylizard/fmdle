@@ -58,13 +58,14 @@ function hashCode(str) {
 }
 
 function dailyIndex(total) {
-    return getRandomInt(total)
     const today = new Date().toISOString().slice(0, 10);
     return Math.abs(hashCode(today)) % total;
 }
 
 function getRandomInt(limit) {
-    return Math.floor(Math.random() * limit) + 1;
+    let number = Math.floor(Math.random() * limit) + 1;
+    console.log(number)
+    return number;
 }
 
 function compareStat(guessValue, answerValue) {
@@ -127,7 +128,7 @@ function createStatBox(value, status) {
 
 function parseStat(raw, type = "numeric") {
     const match = raw.match(/\((.*)\)/);
-    const value = match ? match[1] : raw; // show only the value, no emoji
+    const value = match ? match[1] : raw;
 
     if (raw.startsWith("✅")) return { value, status: "correct" };
     if (raw.startsWith("⚠️")) return { value, status: "partial" };
@@ -190,7 +191,7 @@ function renderComparison(result) {
     ];
 
     statBoxes.forEach((box, index) => {
-        box.style.animationDelay = `${index * 0.5}s`; // 150ms delay between each
+        box.style.animationDelay = `${index * 0.5}s`;
         statsRow.appendChild(box);
     });
 
@@ -268,32 +269,130 @@ function makeGuess(guessNameParam) {
     renderComparison(result);
 
     if (guessCard.name === answerCard.name) {
-        document.getElementById(
-            "result"
-        ).innerHTML = `<h2>🎉 You got it in ${attempts} tries!</h2><img src="data/yugioh_card_artworks_full/${String(
-            answerCard.id
-        ).padStart(3, "0")}.png" width="200">`;
         input.disabled = true;
-        clearSuggestions();
+        setTimeout(() => showModal(true), 3 * 1000);
     } else if (attempts >= maxAttempts) {
-        document.getElementById(
-            "result"
-        ).innerHTML = `<h2>❌ Out of guesses! The answer was:</h2><strong>${answerCard.name
-        }</strong><br><img src="data/yugioh_card_artworks/${String(
-            answerCard.id
-        ).padStart(3, "0")}.png" width="300">`;
         input.disabled = true;
-        clearSuggestions();
+        setTimeout(() => showModal(false), 3 * 1000);
     }
 
     input.value = "";
     input.focus();
 }
 
+function showResultPopup(message, imageUrl) {
+    document.getElementById("popup-message").innerHTML = message;
+    document.getElementById("popup-image").src = imageUrl;
+    document.getElementById("result-popup").classList.remove("hidden");
+}
+
+function restartGame() {
+    location.reload();
+}
+
+function nextGame() {
+    // restart game for now, need to add new games:
+    // - guess based on description
+    // - guess based on zoomed in image
+    // - guess based on fusion?
+    restartGame();
+    return;
+    usedNames.clear();
+    attempts = 0;
+    document.getElementById("guess-counter").textContent = `Guesses: 0 / ${maxAttempts}`;
+    document.getElementById("guesses").innerHTML = "";
+    document.getElementById("result-popup").classList.add("hidden");
+    document.getElementById("guess-input").value = "";
+    document.getElementById("guess-input").disabled = false;
+    document.getElementById("result").innerHTML = "";
+    answerCard = cards[getRandomInt(cards.length)];
+}
+
+function showModal(win) {
+    const modal = document.getElementById("result-modal");
+    const message = document.getElementById("modal-message");
+    const image = document.getElementById("modal-image");
+    const statsContainer = document.getElementById("modal-stats");
+
+    if (win) {
+        message.textContent = `🎉 You got it in ${attempts} tries!`;
+    } else {
+        message.innerHTML = `❌ Out of guesses!<br>The answer was: ${answerCard.name}`;
+    }
+
+    image.src = `data/yugioh_card_artworks_full/${String(answerCard.id).padStart(3, "0")}.png`;
+
+    // Clear previous stats
+    statsContainer.innerHTML = "";
+
+    const statKeys = [
+        "type",
+        "attack",
+        "defense",
+        "level",
+        "guardianStarA",
+        "guardianStarB"
+    ];
+
+    for (const key of statKeys) {
+        const label = document.createElement("div");
+        label.className = "stat-label";
+
+        if (key === "guardianStarA") {
+            label.textContent = "STAR A";
+        } else if (key === "guardianStarB") {
+            label.textContent = "STAR B";
+        } else {
+            label.textContent = key.toUpperCase();
+        }
+
+        const value = document.createElement("div");
+        value.className = "stat-value";
+
+        let raw = answerCard[key];
+        if (raw === undefined || raw === null) {
+            raw = "—";
+        } else {
+            if (key === "type" && cardTypes[raw]) {
+                raw = cardTypes[raw]; // Use emoji type name
+            } else if (key === "guardianStarA" && starNames[raw]) {
+                raw = starNames[raw]; // Use stars for level
+            } else if (key === "guardianStarB" && starNames[raw]) {
+                raw = starNames[raw]; // Use stars for level
+            }
+        }
+
+        value.textContent = raw;
+
+        statsContainer.appendChild(label);
+        statsContainer.appendChild(value);
+    }
+
+    modal.classList.remove("hidden");
+}
+
+const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.length - 3, cardTypes.length - 4];
+
 (async function init() {
     cards = await fetchCardData();
-    answerCard = cards[dailyIndex(cards.length)];
 
+    // Filter cards to exclude unwanted types
+    const filteredCards = cards.filter(card => !excludedTypes.includes(card.type));
+
+    if (filteredCards.length === 0) {
+        throw new Error("No cards available after filtering");
+    }
+
+    // Get the daily index relative to filtered cards
+    const index = getRandomInt(filteredCards.length);
+
+    // The chosen card
+    answerCard = filteredCards[index];
+
+    // If you need the index of the answerCard in the original cards array:
+    const originalIndex = cards.indexOf(answerCard);
+
+    // Continue with your input event listener setup
     const input = document.getElementById("guess-input");
     input.addEventListener("input", () => {
         if (input.disabled) return;
@@ -313,3 +412,4 @@ function makeGuess(guessNameParam) {
 
     input.focus();
 })();
+

@@ -164,3 +164,65 @@ input {
     font-size: 0.85rem;
     user-select: none;
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: #222;
+    color: #eee;
+    padding: 2rem;
+    padding-top: 0px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+}
+
+.modal button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #666;
+}
+
+.hidden {
+    display: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0.5rem 1.5rem;
+    justify-content: center;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.stats-grid .stat-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #ccc;
+}
+
+.stats-grid .stat-value {
+    color: #fff;
+}
