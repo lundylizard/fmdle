@@ -152,6 +152,11 @@ input {
     color: #ccc;
 }
 
+#score-counter {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 .header-row .stat-label {
     text-align: center;
     font-size: 0.85rem;

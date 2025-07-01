@@ -44,27 +44,42 @@ const starNames = [
     "Venus",
 ];
 
+function setCookie(name, value, days = 365) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+    }, null);
+}
+
+function addScore() {
+    setCookie('score', getScore() + 1);
+    updateScore();
+}
+
+function resetScore() {
+    setCookie("score", "0");
+    updateScore();
+}
+
+function getScore() {
+    return parseInt(getCookie('score')) || 0;
+}
+
+function updateScore() {
+    document.getElementById("score-counter").textContent = "🔥 Score: " + getScore();
+}
+
 function fetchCardData() {
     return fetch("data/cards.json").then((res) => res.json());
 }
 
-function hashCode(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash |= 0;
-    }
-    return hash;
-}
-
-function dailyIndex(total) {
-    const today = new Date().toISOString().slice(0, 10);
-    return Math.abs(hashCode(today)) % total;
-}
-
 function getRandomInt(limit) {
     let number = Math.floor(Math.random() * limit) + 1;
-    console.log(number)
     return number;
 }
 
@@ -316,8 +331,10 @@ function showModal(win) {
 
     if (win) {
         message.textContent = `🎉 You got it in ${attempts} tries!`;
+        addScore();
     } else {
         message.innerHTML = `❌ Out of guesses!<br>The answer was: ${answerCard.name}`;
+        resetScore();
     }
 
     image.src = `data/yugioh_card_artworks_full/${String(answerCard.id).padStart(3, "0")}.png`;
@@ -374,6 +391,9 @@ function showModal(win) {
 const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.length - 3, cardTypes.length - 4];
 
 (async function init() {
+
+    updateScore();
+
     cards = await fetchCardData();
 
     // Filter cards to exclude unwanted types
@@ -388,6 +408,7 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
 
     // The chosen card
     answerCard = filteredCards[index];
+    console.log(answerCard.name)
 
     // If you need the index of the answerCard in the original cards array:
     const originalIndex = cards.indexOf(answerCard);
