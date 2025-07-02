@@ -154,7 +154,12 @@ input {
 
 #score-counter {
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+}
+
+#highscore-counter {
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .header-row .stat-label {

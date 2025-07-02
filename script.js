@@ -74,6 +74,24 @@ function updateScore() {
     document.getElementById("score-counter").textContent = "🔥 Score: " + getScore();
 }
 
+function getHighScore() {
+    return parseInt(getCookie('highscore')) || 0;
+}
+
+function setHighScore(score) {
+    setCookie('highscore', score);
+}
+
+function updateHighScore(score) {
+    if (score > getHighScore()) {
+        setHighScore(score);
+    }
+}
+
+function updateHighScoreDisplay() {
+    document.getElementById("highscore-counter").textContent = "🏆 High Score: " + getHighScore();
+}
+
 function fetchCardData() {
     return fetch("data/cards.json").then((res) => res.json());
 }
@@ -332,6 +350,7 @@ function showModal(win) {
     if (win) {
         message.textContent = `🎉 You got it in ${attempts} tries!`;
         addScore();
+        updateHighScore(getScore());
     } else {
         message.innerHTML = `❌ Out of guesses!<br>The answer was: ${answerCard.name}`;
         resetScore();
@@ -393,6 +412,7 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
 (async function init() {
 
     updateScore();
+    updateHighScoreDisplay();
 
     cards = await fetchCardData();
 
@@ -433,4 +453,3 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
 
     input.focus();
 })();
-
