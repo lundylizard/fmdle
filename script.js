@@ -411,6 +411,8 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
 
 (async function init() {
 
+    // need to fix this being absolute horrendous code lol 
+
     updateScore();
     updateHighScoreDisplay();
 

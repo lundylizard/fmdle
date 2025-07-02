@@ -31,7 +31,6 @@ input {
     max-height: 320px;
     overflow-y: auto;
     width: 100%;
-    /* match input width */
     z-index: 1000;
     display: none;
 }
@@ -66,9 +65,7 @@ input {
 
 .guess-result {
     max-width: 500px;
-    /* or any width you prefer */
     margin: 5px auto;
-    /* center horizontally */
     padding: 0.5rem;
     border: 1px solid #555;
     background-color: #222;
