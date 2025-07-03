@@ -419,21 +419,32 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
     cards = await fetchCardData();
 
     // Filter cards to exclude unwanted types
-    const filteredCards = cards.filter(card => !excludedTypes.includes(card.type));
+    const filteredCards = cards.filter(card =>
+        !excludedTypes.includes(card.type) && typeof card.level === 'number'
+    );
 
     if (filteredCards.length === 0) {
         throw new Error("No cards available after filtering");
     }
 
-    // Get the daily index relative to filtered cards
-    const index = getRandomInt(filteredCards.length);
+    // Split into low-level (≤4) and high-level (>4) groups
+    const lowLevelCards = filteredCards.filter(card => card.level <= 4);
+    const highLevelCards = filteredCards.filter(card => card.level > 4);
 
-    // The chosen card
-    answerCard = filteredCards[index];
-    console.log(answerCard.name)
+    // Choose group based on probability (35% high, 75% low)
+    const useHighLevel = Math.random() < 0.35;
 
-    // If you need the index of the answerCard in the original cards array:
-    const originalIndex = cards.indexOf(answerCard);
+    const pool = useHighLevel ? highLevelCards : lowLevelCards;
+
+    if (pool.length === 0) {
+        // Fallback in case one group is empty
+        answerCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+    } else {
+        const index = Math.floor(Math.random() * pool.length);
+        answerCard = pool[index];
+    }
+
+    console.log(answerCard.name);
 
     // Continue with your input event listener setup
     const input = document.getElementById("guess-input");
