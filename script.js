@@ -1,7 +1,8 @@
 let cards = [];
 let answerCard;
 let attempts = 0;
-const maxAttempts = 5;
+let guessResults = [];
+let maxAttempts = 5;
 
 const cardTypes = [
     "Dragon",
@@ -294,11 +295,12 @@ function makeGuess(guessNameParam) {
     }
 
     attempts++;
-    document.getElementById("guess-counter").textContent = `Guesses: ${attempts} / ${maxAttempts}`;
+    updateGuessCounter()
     usedNames.add(guessCard.name);
     clearSuggestions();
 
     const result = compareCards(guessCard, answerCard);
+    guessResults.push({ guess: guessCard, feedbackFromAnswer: result });
     renderComparison(result);
 
     if (guessCard.name === answerCard.name) {
@@ -311,6 +313,34 @@ function makeGuess(guessNameParam) {
 
     input.value = "";
     input.focus();
+
+    const possibleCards = cards.filter((card) =>
+        isCardPossible(card, guessResults)
+    );
+
+    console.log(`${possibleCards.length} cards still possible`);
+    console.log(possibleCards);
+
+}
+
+function updateGuessCounter() {
+    const isLowered = maxAttempts == 4;
+    const isLoweredString = isLowered ? ' (-1)' : "";
+    document.getElementById("guess-counter").textContent = `Guesses: ${attempts} / ${maxAttempts} ${isLoweredString}`;
+}
+
+function isCardPossible(candidate, allGuessResults) {
+    return allGuessResults.every(({ guess, feedbackFromAnswer }) => {
+        const simulatedFeedback = compareCards(guess, candidate);
+        return (
+            simulatedFeedback.type === feedbackFromAnswer.type &&
+            simulatedFeedback.attack === feedbackFromAnswer.attack &&
+            simulatedFeedback.defense === feedbackFromAnswer.defense &&
+            simulatedFeedback.level === feedbackFromAnswer.level &&
+            simulatedFeedback.guardianA === feedbackFromAnswer.guardianA &&
+            simulatedFeedback.guardianB === feedbackFromAnswer.guardianB
+        );
+    });
 }
 
 function showResultPopup(message, imageUrl) {
@@ -414,7 +444,13 @@ const excludedTypes = [cardTypes.length - 1, cardTypes.length - 2, cardTypes.len
     // need to fix this being absolute horrendous code lol 
 
     updateScore();
+
+    if (getScore() >= 50) {
+        maxAttempts = 4;
+    }
+
     updateHighScoreDisplay();
+    updateGuessCounter();
 
     cards = await fetchCardData();
 
