@@ -208,7 +208,18 @@ function renderComparison(result) {
     const guardianAData = parseStat(result.guardianA, "boolean");
     const guardianBData = parseStat(result.guardianB, "boolean");
 
-    const typeBox = createStatBox(typeData.value, typeData.status);
+    const typeBox = createStatBox('', typeData.status); // create an empty box first
+
+    const typeImg = document.createElement('img');
+    typeImg.src = `data/types/${typeData.value}.png`;
+    typeImg.alt = typeData.value;
+    typeImg.title = typeData.value;
+    typeImg.style.width = '20px';
+    typeImg.style.height = '20px';
+    typeImg.style.objectFit = 'contain';
+
+    typeBox.appendChild(typeImg);
+
     const attackBox = createStatBox(attackData.value, attackData.status);
     const defenseBox = createStatBox(defenseData.value, defenseData.status);
     const levelBox = createStatBox(levelData.value, levelData.status);
@@ -349,26 +360,8 @@ function showResultPopup(message, imageUrl) {
     document.getElementById("result-popup").classList.remove("hidden");
 }
 
-function restartGame() {
-    location.reload();
-}
-
 function nextGame() {
-    // restart game for now, need to add new games:
-    // - guess based on description
-    // - guess based on zoomed in image
-    // - guess based on fusion?
-    restartGame();
-    return;
-    usedNames.clear();
-    attempts = 0;
-    document.getElementById("guess-counter").textContent = `Guesses: 0 / ${maxAttempts}`;
-    document.getElementById("guesses").innerHTML = "";
-    document.getElementById("result-popup").classList.add("hidden");
-    document.getElementById("guess-input").value = "";
-    document.getElementById("guess-input").disabled = false;
-    document.getElementById("result").innerHTML = "";
-    answerCard = cards[getRandomInt(cards.length)];
+    location.reload();
 }
 
 function showModal(win) {

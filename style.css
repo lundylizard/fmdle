@@ -86,7 +86,7 @@ input {
     height: 60px;
     object-fit: cover;
     border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
 }
 
 .stats-row {
@@ -99,7 +99,7 @@ input {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(5px);
+        transform: translateY(-5px);
     }
 
     to {
@@ -119,14 +119,29 @@ input {
     justify-content: center;
     align-items: center;
     user-select: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgb(0, 0, 0, 1);
     text-align: center;
     line-height: 1.2;
     animation: fadeIn 1s ease forwards;
 }
 
+@keyframes glowCorrect {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+}
+
 .stat-box.correct {
     background-color: #4caf50;
+    animation: glowCorrect 1s ease forwards;
 }
 
 .stat-box.wrong {
@@ -178,7 +193,7 @@ input {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -193,7 +208,60 @@ input {
     border-radius: 8px;
     text-align: center;
     max-width: 90%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    animation: zoomIn 0.5s ease forwards;
+    perspective: 1000px;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+#modal-image-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    margin-bottom: 100px;
+    animation: spinY 5s linear infinite;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+#modal-image,
+#modal-image-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+#modal-image-backdrop {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+#modal-image {
+    z-index: 2;
+}
+
+@keyframes spinY {
+    from {
+        transform: rotateY(0deg);
+    }
+
+    to {
+        transform: rotateY(360deg);
+    }
 }
 
 .modal button {

@@ -38,10 +38,13 @@
   <div id="result-modal" class="modal hidden">
     <div class="modal-content">
       <h2 id="modal-message"></h2>
-      <img id="modal-image" src="" width="200" />
+      <div id="modal-image-wrapper">
+        <img id="modal-image-backdrop" src="data/backdrop.png" width="150" />
+        <img id="modal-image" src="" width="150" />
+      </div>
       <div id="modal-stats" class="stats-grid" style="margin: 1rem 0;"></div>
       <div>
-        <button onclick="restartGame()">🔁 Again</button>
+        <button onclick="nextGame()">🔁 Again</button>
       </div>
     </div>
   </div>
