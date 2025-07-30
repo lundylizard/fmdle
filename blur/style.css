@@ -226,8 +226,7 @@ input {
 #modal-answer-card-name {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #aed581;
-    /* Light green */
+    color: #ffff;
     margin: 0 auto 1rem;
 }
 

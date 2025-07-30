@@ -5,7 +5,7 @@ const maxAttempts = 5;
 const usedNames = new Set();
 
 // Define blur levels. The first is the initial state, the last reveals the image.
-const blurLevels = [32, 20, 12, 6, 2, 0];
+const blurLevels = [60, 40, 30, 20, 10, 0];
 
 // --- Cookie and Score Functions ---
 function setCookie(name, value, days = 365) {
@@ -161,7 +161,7 @@ function filterSuggestions(inputValue) {
     const val = inputValue.toLowerCase();
     return cards.filter(
         (c) => c.name.toLowerCase().includes(val) && !usedNames.has(c.name.toLowerCase())
-    ).slice(0, 5); // Limit to 5 suggestions
+    );
 }
 
 function clearSuggestions() {
