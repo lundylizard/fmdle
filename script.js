@@ -326,7 +326,7 @@ function nextGame() {
 }
 
 function nextGameBlur() {
-    location.href = "./blur";
+    window.location.href = "./blur";
 }
 
 function showModal(win) {
